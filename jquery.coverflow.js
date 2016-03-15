@@ -64,7 +64,7 @@
 
 		_window_handler_resize:		null,
 		_window_handler_keydown:	null,
-
+		_control:	null,
 		_create: function() {
 			var that = this,
 				covers = that._getCovers(),
@@ -146,7 +146,23 @@
 				that.refresh();
 			};
 			$(window).on('resize', that._window_handler_resize);
-
+			// Control nav(prev, next)
+			that._control = function(event){
+					var which = $(this).attr('class');
+					 switch (which) {
+						case 'prev':	// left
+							event.preventDefault();
+							that._setIndex(that.options.index - 1, true);
+							break;
+ 
+						case 'next':	// right
+							event.preventDefault();
+							that._setIndex(that.options.index + 1, true);
+							break;
+					}
+			};
+			$('span.prev, span.next').on('click', that._control);
+			
 			that._window_handler_keydown = function(event) {
 				if (($.inArray(that.options.enableKeyboard, [true, 'both', 'focus']) >= 0 && that.element.is(':focus'))
 				 || ($.inArray(that.options.enableKeyboard, [true, 'both', 'hover']) >= 0 >= 0 && that.element.is(':hover'))) {
